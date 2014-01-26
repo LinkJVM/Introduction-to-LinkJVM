@@ -1,9 +1,9 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
 /**
  * Default theme for reveal.js.
  *
  * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
  */
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
 @font-face {
   font-family: 'League Gothic';
   src: url("../../lib/font/league_gothic-webfont.eot");
@@ -12,16 +12,30 @@
   font-style: normal; }
 
 /*********************************************
+ * DARK SLIDES
+ *********************************************/
+.reveal .dark {
+  color: #eeeeee; }
+
+.reveal .dark h1,
+.reveal .dark h2,
+.reveal .dark h3,
+.reveal .dark h4,
+.reveal .dark h5,
+.reveal .dark h6 {
+  color: #eeeeee; }
+
+/*********************************************
  * GLOBAL STYLES
  *********************************************/
 body {
-  background: #1c1e20;
-  background: -moz-radial-gradient(center, circle cover, #555a5f 0%, #1c1e20 100%);
-  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #555a5f), color-stop(100%, #1c1e20));
-  background: -webkit-radial-gradient(center, circle cover, #555a5f 0%, #1c1e20 100%);
-  background: -o-radial-gradient(center, circle cover, #555a5f 0%, #1c1e20 100%);
-  background: -ms-radial-gradient(center, circle cover, #555a5f 0%, #1c1e20 100%);
-  background: radial-gradient(center, circle cover, #555a5f 0%, #1c1e20 100%);
+  background: #cccccc;
+  background: -moz-radial-gradient(center, circle cover, white 0%, #cccccc 100%);
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, white), color-stop(100%, #cccccc));
+  background: -webkit-radial-gradient(center, circle cover, white 0%, #cccccc 100%);
+  background: -o-radial-gradient(center, circle cover, white 0%, #cccccc 100%);
+  background: -ms-radial-gradient(center, circle cover, white 0%, #cccccc 100%);
+  background: radial-gradient(center, circle cover, white 0%, #cccccc 100%);
   background-color: #2b2b2b; }
 
 .reveal {
@@ -29,7 +43,7 @@ body {
   font-size: 36px;
   font-weight: normal;
   letter-spacing: -0.02em;
-  color: #eeeeee; }
+  color: #2b2b2b; }
 
 ::selection {
   color: white;
@@ -46,7 +60,7 @@ body {
 .reveal h5,
 .reveal h6 {
   margin: 0 0 20px 0;
-  color: #eeeeee;
+  color: #2b2b2b;
   font-family: "League Gothic", Impact, sans-serif;
   line-height: 0.9em;
   letter-spacing: 0.02em;
@@ -83,7 +97,7 @@ body {
 .reveal section img {
   margin: 15px 0px;
   background: rgba(255, 255, 255, 0.12);
-  border: 4px solid #eeeeee;
+  border: 4px solid #2b2b2b;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   -webkit-transition: all .2s linear;
   -moz-transition: all .2s linear;

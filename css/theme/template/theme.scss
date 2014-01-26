@@ -1,6 +1,23 @@
 // Base theme template for reveal.js
 
 /*********************************************
+ * DARK SLIDES
+ *********************************************/
+
+.reveal .dark{
+	color: $darkMainColor;
+}
+
+.reveal .dark h1,
+.reveal .dark h2,
+.reveal .dark h3,
+.reveal .dark h4,
+.reveal .dark h5,
+.reveal .dark h6 {
+	color: $darkHeadingColor;
+}
+
+/*********************************************
  * GLOBAL STYLES
  *********************************************/
 

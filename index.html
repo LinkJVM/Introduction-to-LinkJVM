@@ -48,21 +48,15 @@
 					</p>
 				</section>
 				<section>
-					<section>
-						<h2>Why Java?</h2>
-						<ul>
-							<li>Most students get started with programming using Java</li>
-							<li>Automatic garbage collection</li>
-							<li>Excellent set of basic data types</li>
-							<li>Huge standard library</li>
-							<li>Easy to use multithreading</li>
-							<li>Better maintanability because of object orientation</li>
-						</ul>
-					</section>
-					<!--section>
-						<h2>What is Java?</h2>
-						
-					</section-->
+					<h2>Why Java?</h2>
+					<ul>
+						<li>Most students get started with programming using Java</li>
+						<li>Automatic garbage collection</li>
+						<li>Excellent set of basic data types</li>
+						<li>Huge standard library</li>
+						<li>Easy to use multithreading</li>
+						<li>Better maintanability because of object orientation</li>
+					</ul>
 				</section>
 				<section>
 					<h2>SSH on the Link</h2>
@@ -99,8 +93,27 @@
 					</ol>
 				</section-->
 				<section>
-					<h2>Start developing</h2>
-					<p><a href="http://linkjvm.github.io/docs">Javadoc</a></p>
+					<h2>Workflow</h2>
+					<p>
+						Currently you need to upload your jar (or class) file(s) manually and execute them using a C wrapper.
+						We plan to develop an eclipse plugin for automatic wrapping, compilation and uploading.
+					</p>
+					<h3>C Wrapper</h3>
+					<pre><code class="language-c">
+						#include &lt;stdlib.h&gt;
+						#define JAR_LOCATION /path/to/jar
+						#define JAR_NAME myJar.jar
+ 
+						int main() {
+							return system("export BOOTCLASSPATH=\"/usr/share/jamvm/classes.zip:\
+							/usr/share/classpath/glibj.zip:/usr/share/classpath/tools.zip:\
+							/usr/lib/linkjvmjava.jar\"; export CLASSPATH=\"/usr/share/jamvm/classes.zip:\
+							/usr/share/classpath/glibj.zip:/usr/share/classpath/tools.zip:\
+							/usr/lib/linkjvmjava.jar:.\"; export LD_LIBRARY_PATH=\"\
+							/usr/lib/classpath:/usr/lib\"; java -jar CLASS_LOCATION/JAR_NAME");
+						}
+					</code></pre>
+					<p>Also a Github Gist: <a href="https://gist.github.com/kleiinnn/7514876">gist.github.com/kleiinnn/7514876</a></p>
 				</section>
 			</div>
 		</div>

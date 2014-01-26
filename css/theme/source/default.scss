@@ -41,7 +41,7 @@ $backgroundColor: #2b2b2b;
 
 // Background generator
 @mixin bodyBackground() {
-	@include radial-gradient( #ccc, #fff);
+	@include radial-gradient( #eee, #fff);
 }
 
 @mixin darkBodyBackground() {

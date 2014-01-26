@@ -16,13 +16,11 @@
 		<link rel="stylesheet" href="css/reveal.min.css">
 		<link rel="stylesheet" href="css/theme/default.css" id="theme">
 
-		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
-
 		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
 		<script>
 			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
 		</script>
+		<link rel="stylesheet" href="css/prism.css">
 
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
@@ -31,12 +29,69 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				
+				<section>
+					<h1>LinkJVM</h1>
+					<h3>Java on the KIPR Link</h3>
+					<p>
+						<small><a href="https://mklein.co.at">Markus Klein</a>  /  <object data="img/octocat.svg" type="image/svg+xml" width="30" heigth="30"></object> kleiinnn</small>
+					</p>
+				</section>
+				<section>
+					<h2>What is LinkJVM</h2>
+					<ul>
+						<li>Java Runtime Enironment(JamVM)</li>
+						<li>Java compiler and other tools(javac, jar, ...)</li>
+						<li>Library for controlling the robot with Java</li>
+					</ul>
+					<p>
+						You can execute any JVM language(Scala, JavaScript(Rhino), ...) with LinkJVM.
+					</p>
+				</section>
+				<section>
+					<section>
+						<h2>Why Java?</h2>
+						<ul>
+							<li>Most students get started with programming using Java</li>
+							<li>Automatic garbage collection</li>
+							<li>Excellent set of basic data types</li>
+							<li>Huge standard library</li>
+							<li>Easy to use multithreading</li>
+							<li>Better maintanability because of object orientation</li>
+						</ul>
+					</section>
+					<!--section>
+						<h2>What is Java?</h2>
+						
+					</section-->
+				</section>
+				<section>
+					<h2>Installing via SSH</h2>
+					<pre><code class="language-bash">
+						#Remove old java packages
+						opkg remove --force-depends jamvm jikes classpath classpath-dev classpath-common
+						#Go your flash drive
+						cd /kovan/media/sda1/[...]/
+						#Compile the installer
+						gcc -o linkjvm_installer linkjvm_installer.c
+						#Run it
+						./linkjvm_installer
+					</code></pre>
+				</section>
+				<section>
+					<h2>Installing via LinkJVM-Installer</h2>
+					<ol>
+						<li>Put the <code class="language-none">LinkJVM</code> folder to the root of your flash drive</li>	
+						<li>Open the Link´s file manager</li>
+						<li>Browse to <code class="language-none">media/sda1/LinkJVM</code></li>
+						<li>Compile <code class="language-none">linkjvm_installer.c</code></li>
+						<li>Run linkjvm_installer</li>						
+					</ol>
+				</section>
 			</div>
 		</div>
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.min.js"></script>
-
+		<script src="js/prism.js"></script>
 		<script>
 
 			// Full list of configuration options available here:
@@ -59,7 +114,6 @@
 					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
 					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
 					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
 					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]

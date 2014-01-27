@@ -94,10 +94,18 @@
 				</section-->
 				<section>
 					<h2>Workflow</h2>
+					<ol>
+						<li>You can develop your program with an IDE / editor of your your choice.</li>
+						<li>Currently you need to upload your jar (or class) file(s) manually and execute them using a C wrapper. The upload can be done via SCP, SFTP or a flash drive.</li>
+						<li>To execute a Java program on the Link via BotUI, you need a C wrapper which starts the JVM.</li>
+					</ul>
+					<hr>
 					<p>
-						Currently you need to upload your jar (or class) file(s) manually and execute them using a C wrapper.
 						We plan to develop an eclipse plugin for automatic wrapping, compilation and uploading.
 					</p>
+					
+				</section>
+				<section>
 					<h3>C Wrapper</h3>
 					<pre><code class="language-c">
 						#include &lt;stdlib.h&gt;
@@ -114,6 +122,22 @@
 						}
 					</code></pre>
 					<p>Also a Github Gist: <a href="https://gist.github.com/kleiinnn/7514876">gist.github.com/kleiinnn/7514876</a></p>
+
+				</section>
+				<section>
+					<h2>Deploying a program on the Link</h2>
+					<pre><code class="language-bash">
+						IP="1.2.3.4"
+						JAR_NAME="myjar.jar"
+						WRAPPER_NAME="wrapper.c"
+						PROJECT_NAME="myproject"
+						
+						#Upload the wrapper and the jar
+						scp JAR_NAME root@$IP:/kovan/lib/$PROJECT_NAME/
+						scp WRAPPER_NAME root@$IP:/kovan/bin/$PROJECT_NAME/
+						#Compile the wrapper
+						ssh root@$IP "cd /usr/bin/$PROJECT_NAME; gcc -o PROJECT_NAME $WRAPPER_NAME, rm WRAPPER_NAME"
+					</code></pre>
 				</section>
 				<section>
 					<h2>Robot Library Documentation</h2>

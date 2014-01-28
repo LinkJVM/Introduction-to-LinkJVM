@@ -58,16 +58,7 @@
 						<li>Better maintanability because of object orientation</li>
 					</ul>
 				</section>
-				<section>
-					<h2>What you'll need</h2>
-					<ul>
-						<li>KIPR Link</li>
-						<li>Flash Drive</li>
-						<li>Windows Users: WinSCP and Putty</li>
-						<li>*nix Users: Terminal</li>
-					</ul>
-				</section>
-				<section>
+				<!--section>
 					<h2>SSH on the Link</h2>
 					<p>
 						The <code class="language-none">root</code> user has no default password, but you easily set on via BotUI.
@@ -77,16 +68,16 @@
 						<li>For *nix: <code class="language-none">ssh root@$IP</code></li>
 						<li>For Windows: Putty</li>
 					</ul>
-				</section>
+				</section-->
 				<section class="dark" data-background="radial-gradient(rgba(85,90,95,1), rgba(28,30,32,1))">
 					<h3>Part 1</h3>
 					<h1>Installation and Setup</h1>
 				</section>
-				<section>
+				<!--section>
 					<h2>Installing via SSH</h2>
 					<pre><code class="language-bash">
 						#Remove old java packages
-						opkg remove --force-depends jamvm jikes classpath classpath-dev classpath-common
+						opkg remove - -force-depends jamvm jikes classpath classpath-dev classpath-common
 						#Go your flash drive
 						cd /kovan/media/sda1/[...]/
 						#Compile the installer
@@ -94,8 +85,8 @@
 						#Run it
 						./linkjvm_installer
 					</code></pre>
-				</section>
-				<!--section>
+				</section-->
+				<section>
 					<h2>Installing via LinkJVM-Installer</h2>
 					<ol>
 						<li>Put the <code class="language-none">LinkJVM</code> folder to the root of your flash drive</li>	
@@ -104,22 +95,12 @@
 						<li>Compile <code class="language-none">linkjvm_installer.c</code></li>
 						<li>Run linkjvm_installer</li>						
 					</ol>
-				</section-->
-				<section>
-					<h2>Workflow</h2>
-					<ol>
-						<li>You can develop your program with an IDE / editor of your your choice.</li>
-						<li>Currently you need to upload your jar (or class) file(s) manually and execute them using a C wrapper. The upload can be done via SCP, SFTP or a flash drive.</li>
-						<li>To execute a Java program on the Link via BotUI, you need a C wrapper which starts the JVM.</li>
-					</ul>
-					<hr>
-					<p>
-						We plan to develop an eclipse plugin for automatic wrapping, compilation and uploading.
-					</p>
-					
 				</section>
 				<section>
 					<h2>C Wrapper</h2>
+					<p>
+						To execute a Java program on the Link via BotUI, you need a C wrapper which starts the JVM.
+					</p>
 					<pre><code class="language-c">
 						#include &lt;stdlib.h&gt;
 						#define JAR_LOCATION /path/to/jar
@@ -138,6 +119,21 @@
 
 				</section>
 				<section>
+					<h2>Workflow</h2>
+					<ol>
+						<li>You can develop your program with an IDE / editor of your your choice.</li>
+						<li>The LinkJVM-Uploader automatically uploads an jar file to the link and adds the C wrapper for execution via BotUI. </li>
+						<li>After uploading your jar using LinkJVM-Uploader you can directly start it via BotUI.</li>
+					</ol>
+					<hr>
+					<p>
+						LinkJVM-Uploader is availible on Github: <a href="https://github.com/LinkJVM/LinkJVM-Uploader">github.com/LinkJVM/LinkJVM-Uploader</a>
+					</p>
+					<p>
+						We also plan to develop an eclipse plugin for automatic wrapping, compilation and uploading.
+					</p>
+				</section>
+				<!--section>
 					<h2>Deploying a program on the Link</h2>
 					<pre><code class="language-bash">
 						IP="1.2.3.4"
@@ -152,11 +148,33 @@
 						ssh root@$IP "cd /usr/bin/$PROJECT_NAME; gcc -o PROJECT_NAME $WRAPPER_NAME, rm WRAPPER_NAME"
 					</code></pre>
 					<p>Also a Github Gist: <a href="https://gist.github.com/kleiinnn/7514876">gist.github.com/kleiinnn/7514876</a></p>
+				</section-->
+				<section class="dark" data-background="radial-gradient(rgba(85,90,95,1), rgba(28,30,32,1))">
+					<h3>Part 2</h3>
+					<h1>The Robot Library</h1>
 				</section>
 				<section>
 					<h2>Robot Library Documentation</h2>
 					<p>JavaDoc API: <a href="http://linkjvm.github.io/docs">http://linkjvm.github.io/docs</a></p>
 					<img src="img/javadoc.jpg">
+				</section>
+				<section>
+					<h2>LinkJVM Debugger</h2>
+					<p>
+						The LinkJVM-Debugger allows you to send debug messages to your computer running a Debugger-Client.
+					</p>
+					<p>
+						Download the Debugger Client: <a href="https://github.com/LinkJVM/LinkJVM-Debugger">github.com/LinkJVM/LinkJVM-Debugger</a>
+					</p>
+					<h3>Usage</h3>
+					<pre><code class="language-java">
+						import linkjvm.high.debugger.Debugger;
+						(...)
+						Debugger debugger = new Debugger("Link's IP");
+						debugger.write("Some text!");
+						debugger.writeln("Some line!");
+						debugger.close();
+					</code></pre>
 				</section>
 			</div>
 		</div>

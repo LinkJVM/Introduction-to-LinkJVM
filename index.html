@@ -116,7 +116,15 @@
 						}
 					</code></pre>
 					<p>Also a Github Gist: <a href="https://gist.github.com/kleiinnn/8649678">gist.github.com/kleiinnn/8649678</a></p>
-
+				</section>
+				<section>
+					<h2>LinkJVM-Uploader</h2>
+					<p>
+						LinkJVM automatically uploads a excutable jar file and generates the C wrapper so it can be directly started via BotUI.
+					<p>
+					<p>
+						Just run <code class="language-none">linkjvm_uploader.jar</code> and select the file you want to upload.
+					</p>
 				</section>
 				<section>
 					<h2>Workflow</h2>
@@ -126,9 +134,9 @@
 						<li>After uploading your jar using LinkJVM-Uploader you can directly start it via BotUI.</li>
 					</ol>
 					<hr>
-					<p>
+					<!--p>
 						LinkJVM-Uploader is availible on Github: <a href="https://github.com/LinkJVM/LinkJVM-Uploader">github.com/LinkJVM/LinkJVM-Uploader</a>
-					</p>
+					</p-->
 					<p>
 						We also plan to develop an eclipse plugin for automatic wrapping, compilation and uploading.
 					</p>
@@ -157,6 +165,56 @@
 					<h2>Robot Library Documentation</h2>
 					<p>JavaDoc API: <a href="http://linkjvm.github.io/docs">http://linkjvm.github.io/docs</a></p>
 					<img src="img/javadoc.jpg">
+				</section>
+				<section>
+					<h2>Activity 2</h2>
+					<h3>Exploring the room with the create</h3>
+					<p>
+						The create should drive straight until it bump. Then it should turn a random time and start again exploring the room.
+					</p>
+				</section>
+				<section>
+					<h2>Controlling the Create</h2>
+					<p>An instance of the create class is used to control the create. The method names a pretty equal to libkovan.</p>
+					<pre><code class="language-java">
+						import linkjvm.high.create.Create;
+						(...)
+						Create create = new Create();
+						//Ethabishes a connection to the create
+						create.connect();
+						//Move the create forward
+						create.driveDirect(leftMotorSpeed, rightMotorSpeed);	
+						//Returns the right cliff value
+						create.getRightCliff();
+						//Closes the connection to the create
+						create.disconnect();
+					</code></pre>
+				</section>
+				<section>
+					<h2>Activity 2 - Solution</h2>
+					<pre><code class="language-java">
+					public static void main(String[] args) {
+					&nbsp;&nbsp;&nbsp;&nbsp;Create create = new Create();
+					&nbsp;&nbsp;&nbsp;&nbsp;create.connect();
+					&nbsp;&nbsp;&nbsp;&nbsp;SideButton sb = new SideButton();
+					&nbsp;&nbsp;&nbsp;&nbsp;BButton bb = new BButton();
+					&nbsp;&nbsp;&nbsp;&nbsp;bb.setText("Start");
+					&nbsp;&nbsp;&nbsp;&nbsp;while(!bb.getValue());
+					&nbsp;&nbsp;&nbsp;&nbsp;while(!sb.getValue()) {
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(create.getLeftBump())
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.spinClockwise(250);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(create.getRightBump())
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.spinCounterClockwise(250);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.driveStraigth(400);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thread.sleep(50);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (InterruptedException e) {}
+					&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;create.stop();
+					&nbsp;&nbsp;&nbsp;&nbsp;create.disconnect();
+					}
+					</code></pre>
 				</section>
 				<section>
 					<h2>LinkJVM Debugger</h2>

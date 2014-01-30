@@ -167,25 +167,129 @@
 					<img src="img/javadoc.jpg">
 				</section>
 				<section>
+					<h2>Activity 1</h2>
+					<h3>Stop at the wall</h3>
+					<p>
+						The demobot should drive straight until the lever sensor placed at the front of the demobot bumps.
+					</p>
+				</section>
+				<section>
+					<h2>Using Sensors</h2>
+					<p>
+						Basically, there a two kinds of sensors:
+					</p>
+					<ul>
+						<li>Analog sensors(analog sensors, acceleration sensors, ...): Analog sensors implement the <code class="language-none">IAnalogSensor</code> interface</li>
+						<li>Digital sensors(digital sensors, buttons, ...): Digital sensors implement the <code class="language-none">IDigitalSensor</code> interface</li>
+					</ul>
+					<!--p>
+						The sensor classes can be found in the following packages:
+						<pre><code class="language-none">
+							linkjvm.high.sensors.buttons
+							linkjvm.high.sensors.analog
+							linkjvm.high.sensors.digital
+							linkjvm.high.sensors.analog.acceleration
+						</code></pre>
+					</p-->
+				</section>
+				<section>
+					<h2>Analog Sensors</h2>
+					<pre><code class="language-java">
+						import linkjvm.high.sensors.analog.AnalogSensor;
+						import linkjvm.high.sensors.analog.acceleration.AccelerationSensor;
+						(...)
+						//Create a new analog sensor
+						AnalogSensor analog = new AnalogSensor(PORT);
+						//Get the current sensor value
+						analog.getValue();
+						//Create a new x-axis acceleraion sensor
+						AccelerationSensor accel = new AccelerationSensor(AccelerationSensor.Axis.X);
+						//Get the acceleration sensor's value
+						accel.getValue();
+					</code></pre>
+				</section>
+				<section>
+					<h2>Digital Sensors</h2>
+					<pre><code class="language-java">
+						import linkjvm.high.sensors.buttons.*;
+						import linkjvm.high.sensors.digital.DigitalSensor;
+						(...)
+						//Create a new digital sensor
+						DigitalSensor digital = new DigitalSensor(PORT);
+						//Get the current value
+						digital.getValue();
+						//Craete a new button
+						XButton button = new XButton();
+						//Get if the button is pressed
+						button.getValue();	
+						button.isPressed();
+						//Set the button's text
+						button.setText("Text!");
+					</code></pre>
+				</section>
+				<section>
+					<h2>Controlling Motors and Servos</h2>
+					<pre><code class="language-java">
+						import linkjvm.high.motors.Motor;
+						import linkjvm.high.motors.Servo;
+						(...)
+						//Create a new servo
+						Servo servo = new Servo();
+						//Enable the servo
+						servo.enable();
+						//Set the servo's position
+						servo.setPosition(1000);
+						//Disable the servo
+						servo.disable();
+						//Create a new motor
+						Motor motor = new Motor();
+						//Turn the motor at a specified percentage
+						motor.turn(60);
+						//Stop the motor
+						motor.freeze();
+					</code></pre>
+				</section>
+				<section>
+					<h2>Activity 1 - Solution</h2>
+					<pre><code class="language-java">
+						public static void main(String[] args){
+						&nbsp;&nbsp;&nbsp;&nbsp;Motor leftMotor = new Motor(0);
+						&nbsp;&nbsp;&nbsp;&nbsp;Motor rightMotor = new Motor(1);
+						&nbsp;&nbsp;&nbsp;&nbsp;DigitalSensor bumpSensor = new DigitalSensor(0);
+						&nbsp;&nbsp;&nbsp;&nbsp;leftMotor.turn(100);
+						&nbsp;&nbsp;&nbsp;&nbsp;rightMotor.turn(100);
+						&nbsp;&nbsp;&nbsp;&nbsp;while(!bumpSensor.getValue()){
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thread.sleep(100);
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (InterruptedException e) {}
+						&nbsp;&nbsp;&nbsp;&nbsp;}
+						&nbsp;&nbsp;&nbsp;&nbsp;leftMotor.freeze();
+						&nbsp;&nbsp;&nbsp;&nbsp;rightMotor.freeze();		
+						}	
+					</code></pre>
+				</section>
+				<section>
 					<h2>Activity 2</h2>
 					<h3>Exploring the room with the create</h3>
 					<p>
-						The create should drive straight until it bump. Then it should turn a random time and start again exploring the room.
+						The create should drive straight until it bump. Then it should turn and start again exploring the room.
 					</p>
 				</section>
 				<section>
 					<h2>Controlling the Create</h2>
-					<p>An instance of the create class is used to control the create. The method names a pretty equal to libkovan.</p>
+					<p>An instance of the create class is used to control the create. The method names are pretty equal to libkovan.</p>
 					<pre><code class="language-java">
 						import linkjvm.high.create.Create;
 						(...)
 						Create create = new Create();
-						//Ethabishes a connection to the create
+						//Establishes a connection to the create
 						create.connect();
 						//Move the create forward
 						create.driveDirect(leftMotorSpeed, rightMotorSpeed);	
 						//Returns the right cliff value
 						create.getRightCliff();
+						//Returns the left bumper value
+						create.getRightBump();
 						//Closes the connection to the create
 						create.disconnect();
 					</code></pre>
@@ -216,19 +320,63 @@
 					}
 					</code></pre>
 				</section>
+				<section class="language-java">
+					<h2>Activity 3</h2>
+					<h3>Finding the biggest object</h3>
+					<p>
+						The robot should find the biggest object and move to it.
+					</p>
+				</section>
+				<section>
+					<h2>Vision</h2>
+					<p>
+						The LinkJVM's vision system is a little bit different to libkovan's:
+					</p>
+					<img src="./img/vision.svg" width="800">
+				</section>
+				<section>
+					<h2>Activity 3 - Solution</h2>
+					<pre><code class="language-java">
+					public static void main(String[] args) throws InterruptedException {
+					&nbsp;&nbsp;&nbsp;&nbsp;Create create = new Create();
+					&nbsp;&nbsp;&nbsp;&nbsp;create.connect();
+					&nbsp;&nbsp;&nbsp;&nbsp;camera = new ImageProcessor(new CameraConfig(Resolution.MED_RES), 0);
+					&nbsp;&nbsp;&nbsp;&nbsp;camera.openCamera();
+					&nbsp;&nbsp;&nbsp;&nbsp;SideButton sb = new SideButton();
+					&nbsp;&nbsp;&nbsp;&nbsp;while(!sb.getValue()) {
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;camera.update();
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(camera.getObjectCount() &gt; 0) {
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rectangle rec = camera.getBoundingBox(0);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(rec.getWidth() &gt; 80){
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(rec.getCenter().getX() &lt; 290){
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.driveDirect(100, 0);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(rec.getCenter().getX() &gt; 350){
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.driveDirect(100, 0);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thread.sleep(500);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.stop();
+					&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;create.disconnect();
+					&nbsp;&nbsp;&nbsp;&nbsp;camera.close();
+					}
+					</code></pre>
+				</section>
 				<section>
 					<h2>LinkJVM Debugger</h2>
 					<p>
 						The LinkJVM-Debugger allows you to send debug messages to your computer running a Debugger-Client.
 					</p>
 					<p>
-						Download the Debugger Client: <a href="https://github.com/LinkJVM/LinkJVM-Debugger">github.com/LinkJVM/LinkJVM-Debugger</a>
+						Just run <code class="language-none">DebuggerClient.jar</code>.
 					</p>
 					<h3>Usage</h3>
 					<pre><code class="language-java">
 						import linkjvm.high.debugger.Debugger;
 						(...)
-						Debugger debugger = new Debugger("Link's IP");
+						Debugger debugger = new Debugger("PC IP");
 						debugger.write("Some text!");
 						debugger.writeln("Some line!");
 						debugger.close();
@@ -244,8 +392,8 @@
 			// Full list of configuration options available here:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
-				controls: true,
-				progress: true,
+				controls: false,
+				progress: false,
 				history: true,
 				center: true,
 

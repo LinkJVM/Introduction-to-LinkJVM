@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<title>LinkJVM - Java on the KIPR Link</title>
+
+		<meta name="description" content="Java on the KIPR Link">
+		<meta name="author" content="Markus Klein">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+		<link rel="stylesheet" href="css/prism.css">
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section class="dark" data-background="radial-gradient(rgba(85,90,95,1), rgba(28,30,32,1))">
+					<h1>LinkJVM</h1>
+					<h3>Java on the KIPR Link</h3>
+					<p>
+						<small><a href="https://mklein.co.at">Markus Klein</a>  /  <object data="img/octocat.svg" type="image/svg+xml" width="30" heigth="30"></object> kleiinnn</small>
+					</p>
+				</section>
+				<section>
+					<h2>What is LinkJVM</h2>
+					<ul>
+						<li>Java Runtime Enironment(JamVM)</li>
+						<li>Java compiler and other tools(javac, jar, ...)</li>
+						<li>Library for controlling the robot with Java</li>
+					</ul>
+					<p>
+						You can execute any JVM language(Scala, JavaScript(Rhino), ...) with LinkJVM.
+					</p>
+				</section>
+				<section>
+					<h2>Why Java?</h2>
+					<ul>
+						<li>Most students get started with programming using Java</li>
+						<li>Automatic garbage collection</li>
+						<li>Excellent set of basic data types</li>
+						<li>Huge standard library</li>
+						<li>Easy to use multithreading</li>
+						<li>Better maintanability because of object orientation</li>
+					</ul>
+				</section>
+				<!--section>
+					<h2>SSH on the Link</h2>
+					<p>
+						The <code class="language-none">root</code> user has no default password, but you easily set on via BotUI.
+						All you need to do is to connect your Link to a network and open the connection.
+					</p>
+					<ul>
+						<li>For *nix: <code class="language-none">ssh root@$IP</code></li>
+						<li>For Windows: Putty</li>
+					</ul>
+				</section-->
+				<section class="dark" data-background="radial-gradient(rgba(85,90,95,1), rgba(28,30,32,1))">
+					<h3>Part 1</h3>
+					<h1>Installation and Setup</h1>
+				</section>
+				<!--section>
+					<h2>Installing via SSH</h2>
+					<pre><code class="language-bash">
+						#Remove old java packages
+						opkg remove - -force-depends jamvm jikes classpath classpath-dev classpath-common
+						#Go your flash drive
+						cd /kovan/media/sda1/[...]/
+						#Compile the installer
+						gcc -o linkjvm_installer linkjvm_installer.c
+						#Run it
+						./linkjvm_installer
+					</code></pre>
+				</section-->
+				<section>
+					<h2>Download LinkJVM</h2>
+					<p>
+						You can download a zip file containing all needed resources from the LinkJVM-Fileserver.
+					</p>
+					<p>
+						Download: <a href="http://files.mklein.co.at/LinkJVM/LinkJVM-Deploy.zip">files.mklein.co.at/LinkJVM/LinkJVM-Deploy.zip</a>
+					</p>
+				</section>
+				<section>
+					<h2>Installing via LinkJVM-Installer</h2>
+					<ol>
+						<li>Put the <code class="language-none">LinkJVM</code> folder to the root of your flash drive</li>	
+						<li>Open the Link´s file manager</li>
+						<li>Browse to <code class="language-none">media/sda1/LinkJVM</code></li>
+						<li>Compile <code class="language-none">linkjvm_installer.c</code></li>
+						<li>Run linkjvm_installer</li>						
+					</ol>
+				</section>
+				<section>
+					<h2>C Wrapper</h2>
+					<p>
+						To execute a Java program on the Link via BotUI, you need a C wrapper which starts the JVM.
+					</p>
+					<pre><code class="language-c">
+						#include &lt;stdlib.h&gt;
+						#define JAR_LOCATION /path/to/jar
+						#define JAR_NAME myJar.jar
+ 
+						int main() {
+						&nbsp;&nbsp;&nbsp;&nbsp;return system("export BOOTCLASSPATH=\"/usr/share/jamvm/classes.zip:\
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/share/classpath/glibj.zip:/usr/share/classpath/tools.zip:\
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/lib/linkjvmjava.jar\"; export CLASSPATH=\"/usr/share/jamvm/classes.zip:\
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/share/classpath/glibj.zip:/usr/share/classpath/tools.zip:\
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/lib/linkjvmjava.jar:.\"; export LD_LIBRARY_PATH=\"\
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/lib/classpath:/usr/lib\"; java -jar CLASS_LOCATION/JAR_NAME");
+						}
+					</code></pre>
+					<p>Also a Github Gist: <a href="https://gist.github.com/kleiinnn/8649678">gist.github.com/kleiinnn/8649678</a></p>
+				</section>
+				<section>
+					<h2>LinkJVM-Uploader</h2>
+					<p>
+						LinkJVM automatically uploads a excutable jar file and generates the C wrapper so it can be directly started via BotUI.
+					<p>
+					<p>
+						Just run <code class="language-none">LinkJVM-Uploader.jar</code> and select the file you want to upload.
+					</p>
+				</section>
+				<section>
+					<h2>Workflow</h2>
+					<ol>
+						<li>You can develop your program with an IDE / editor of your your choice.</li>
+						<li>The LinkJVM-Uploader automatically uploads an jar file to the link and adds the C wrapper for execution via BotUI. </li>
+						<li>After uploading your jar using LinkJVM-Uploader you can directly start it via BotUI.</li>
+					</ol>
+					<hr>
+					<!--p>
+						LinkJVM-Uploader is availible on Github: <a href="https://github.com/LinkJVM/LinkJVM-Uploader">github.com/LinkJVM/LinkJVM-Uploader</a>
+					</p-->
+					<p>
+						We also plan to develop an eclipse plugin for automatic wrapping, compilation and uploading.
+					</p>
+				</section>
+				<!--section>
+					<h2>Deploying a program on the Link</h2>
+					<pre><code class="language-bash">
+						IP="1.2.3.4"
+						JAR_NAME="myjar.jar"
+						WRAPPER_NAME="wrapper.c"
+						PROJECT_NAME="myproject"
+						
+						#Upload the wrapper and the jar
+						scp JAR_NAME root@$IP:/kovan/lib/$PROJECT_NAME/
+						scp WRAPPER_NAME root@$IP:/kovan/bin/$PROJECT_NAME/
+						#Compile the wrapper
+						ssh root@$IP "cd /usr/bin/$PROJECT_NAME; gcc -o PROJECT_NAME $WRAPPER_NAME, rm WRAPPER_NAME"
+					</code></pre>
+					<p>Also a Github Gist: <a href="https://gist.github.com/kleiinnn/7514876">gist.github.com/kleiinnn/7514876</a></p>
+				</section-->
+				<section class="dark" data-background="radial-gradient(rgba(85,90,95,1), rgba(28,30,32,1))">
+					<h3>Part 2</h3>
+					<h1>The Robot Library</h1>
+				</section>
+				<section>
+					<h2>Robot Library Documentation</h2>
+					<p>JavaDoc API: <a href="http://linkjvm.github.io/docs">http://linkjvm.github.io/docs</a></p>
+					<img src="img/javadoc.jpg">
+				</section>
+				<section>
+					<h2>Activity 1</h2>
+					<h3>Stop at the wall</h3>
+					<p>
+						The demobot should drive straight until the lever sensor placed at the front of the demobot bumps.
+					</p>
+				</section>
+				<section>
+					<h2>Using Sensors</h2>
+					<p>
+						Basically, there a two kinds of sensors:
+					</p>
+					<ul>
+						<li>Analog sensors(analog sensors, acceleration sensors, ...): Analog sensors implement the <code class="language-none">IAnalogSensor</code> interface</li>
+						<li>Digital sensors(digital sensors, buttons, ...): Digital sensors implement the <code class="language-none">IDigitalSensor</code> interface</li>
+					</ul>
+					<!--p>
+						The sensor classes can be found in the following packages:
+						<pre><code class="language-none">
+							linkjvm.high.sensors.buttons
+							linkjvm.high.sensors.analog
+							linkjvm.high.sensors.digital
+							linkjvm.high.sensors.analog.acceleration
+						</code></pre>
+					</p-->
+				</section>
+				<section>
+					<h2>Analog Sensors</h2>
+					<pre><code class="language-java">
+						import linkjvm.high.sensors.analog.AnalogSensor;
+						import linkjvm.high.sensors.analog.acceleration.AccelerationSensor;
+						(...)
+						//Create a new analog sensor
+						AnalogSensor analog = new AnalogSensor(PORT);
+						//Get the current sensor value
+						analog.getValue();
+						//Create a new x-axis acceleraion sensor
+						AccelerationSensor accel = new AccelerationSensor(AccelerationSensor.Axis.X);
+						//Get the acceleration sensor's value
+						accel.getValue();
+					</code></pre>
+				</section>
+				<section>
+					<h2>Digital Sensors</h2>
+					<pre><code class="language-java">
+						import linkjvm.high.sensors.buttons.*;
+						import linkjvm.high.sensors.digital.DigitalSensor;
+						(...)
+						//Create a new digital sensor
+						DigitalSensor digital = new DigitalSensor(PORT);
+						//Get the current value
+						digital.getValue();
+						//Craete a new button
+						XButton button = new XButton();
+						//Get if the button is pressed
+						button.getValue();	
+						button.isPressed();
+						//Set the button's text
+						button.setText("Text!");
+					</code></pre>
+				</section>
+				<section>
+					<h2>Controlling Motors and Servos</h2>
+					<pre><code class="language-java">
+						import linkjvm.high.motors.Motor;
+						import linkjvm.high.motors.Servo;
+						(...)
+						//Create a new servo
+						Servo servo = new Servo();
+						//Enable the servo
+						servo.enable();
+						//Set the servo's position
+						servo.setPosition(1000);
+						//Disable the servo
+						servo.disable();
+						//Create a new motor
+						Motor motor = new Motor();
+						//Turn the motor at a specified percentage
+						motor.turn(60);
+						//Stop the motor
+						motor.freeze();
+					</code></pre>
+				</section>
+				<section>
+					<h2>Activity 1 - Solution</h2>
+					<pre><code class="language-java">
+						public static void main(String[] args){
+						&nbsp;&nbsp;&nbsp;&nbsp;Motor leftMotor = new Motor(0);
+						&nbsp;&nbsp;&nbsp;&nbsp;Motor rightMotor = new Motor(1);
+						&nbsp;&nbsp;&nbsp;&nbsp;DigitalSensor bumpSensor = new DigitalSensor(0);
+						&nbsp;&nbsp;&nbsp;&nbsp;leftMotor.turn(100);
+						&nbsp;&nbsp;&nbsp;&nbsp;rightMotor.turn(100);
+						&nbsp;&nbsp;&nbsp;&nbsp;while(!bumpSensor.getValue()){
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thread.sleep(100);
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (InterruptedException e) {}
+						&nbsp;&nbsp;&nbsp;&nbsp;}
+						&nbsp;&nbsp;&nbsp;&nbsp;leftMotor.freeze();
+						&nbsp;&nbsp;&nbsp;&nbsp;rightMotor.freeze();		
+						}	
+					</code></pre>
+				</section>
+				<section>
+					<h2>Activity 2</h2>
+					<h3>Exploring the room with the create</h3>
+					<p>
+						The create should drive straight until it bump. Then it should turn and start again exploring the room.
+					</p>
+				</section>
+				<section>
+					<h2>Controlling the Create</h2>
+					<p>An instance of the create class is used to control the create. The method names are pretty equal to libkovan.</p>
+					<pre><code class="language-java">
+						import linkjvm.high.create.Create;
+						(...)
+						Create create = new Create();
+						//Establishes a connection to the create
+						create.connect();
+						//Move the create forward
+						create.driveDirect(leftMotorSpeed, rightMotorSpeed);	
+						//Returns the right cliff value
+						create.getRightCliff();
+						//Returns the left bumper value
+						create.getRightBump();
+						//Closes the connection to the create
+						create.disconnect();
+					</code></pre>
+				</section>
+				<section>
+					<h2>Activity 2 - Solution</h2>
+					<pre><code class="language-java">
+					public static void main(String[] args) {
+					&nbsp;&nbsp;&nbsp;&nbsp;Create create = new Create();
+					&nbsp;&nbsp;&nbsp;&nbsp;create.connect();
+					&nbsp;&nbsp;&nbsp;&nbsp;SideButton sb = new SideButton();
+					&nbsp;&nbsp;&nbsp;&nbsp;BButton bb = new BButton();
+					&nbsp;&nbsp;&nbsp;&nbsp;bb.setText("Start");
+					&nbsp;&nbsp;&nbsp;&nbsp;while(!bb.getValue());
+					&nbsp;&nbsp;&nbsp;&nbsp;while(!sb.getValue()) {
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(create.getLeftBump())
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.spinClockwise(250);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(create.getRightBump())
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.spinCounterClockwise(250);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.driveStraigth(400);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thread.sleep(50);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (InterruptedException e) {}
+					&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;create.stop();
+					&nbsp;&nbsp;&nbsp;&nbsp;create.disconnect();
+					}
+					</code></pre>
+				</section>
+				<section class="language-java">
+					<h2>Activity 3</h2>
+					<h3>Finding the biggest object</h3>
+					<p>
+						The robot should find the biggest object and move to it.
+					</p>
+				</section>
+				<section>
+					<h2>Vision</h2>
+					<p>
+						The LinkJVM's vision system is a little bit different to libkovan's:
+					</p>
+					<img src="./img/vision.svg" width="800">
+				</section>
+				<section>
+					<h2>Activity 3 - Solution</h2>
+					<pre><code class="language-java">
+					public static void main(String[] args) throws InterruptedException {
+					&nbsp;&nbsp;&nbsp;&nbsp;Create create = new Create();
+					&nbsp;&nbsp;&nbsp;&nbsp;create.connect();
+					&nbsp;&nbsp;&nbsp;&nbsp;camera = new ImageProcessor(new CameraConfig(Resolution.MED_RES), 0);
+					&nbsp;&nbsp;&nbsp;&nbsp;camera.openCamera();
+					&nbsp;&nbsp;&nbsp;&nbsp;SideButton sb = new SideButton();
+					&nbsp;&nbsp;&nbsp;&nbsp;while(!sb.getValue()) {
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;camera.update();
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(camera.getObjectCount() &gt; 0) {
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rectangle rec = camera.getBoundingBox(0);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(rec.getWidth() &gt; 80){
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(rec.getCenter().getX() &lt; 290){
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.driveDirect(100, 0);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(rec.getCenter().getX() &gt; 350){
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.driveDirect(100, 0);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thread.sleep(500);
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create.stop();
+					&nbsp;&nbsp;&nbsp;&nbsp;}
+					&nbsp;&nbsp;&nbsp;&nbsp;create.disconnect();
+					&nbsp;&nbsp;&nbsp;&nbsp;camera.close();
+					}
+					</code></pre>
+				</section>
+				<section>
+					<h2>LinkJVM Debugger</h2>
+					<p>
+						The LinkJVM-Debugger allows you to send debug messages to your computer running a Debugger-Client.
+					</p>
+					<p>
+						Just run <code class="language-none">DebuggerClient.jar</code>.
+					</p>
+					<h3>Usage</h3>
+					<pre><code class="language-java">
+						import linkjvm.high.debugger.Debugger;
+						(...)
+						Debugger debugger = new Debugger("PC IP");
+						debugger.write("Some text!");
+						debugger.writeln("Some line!");
+						debugger.close();
+					</code></pre>
+				</section>
+				<section>
+					<h2>Resources</h2>
+					<ul>
+						<li>LinkJVM Github Organization: <a href="https://github.com/LinkJVM">github.com/LinkJVM</a></li>
+						<li>LinkJVM Fileserver: <a href="http://files.mklein.co.at/LinkJVM">files.mklein.co.at/LinkJVM</a></li>
+						<li>JavaDoc API: <a href="http://linkjvm.github.io">linkjvm.github.io/docs</a></li>
+					</ul>
+				</section>
+			</div>
+		</div>
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+		<script src="js/prism.js"></script>
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: false,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+	</body>
+</html>
+

@@ -204,8 +204,8 @@
 				<section>
 					<h2>Analog Sensors</h2>
 					<pre><code class="language-java">
-						import linkjvm.high.sensors.analog.AnalogSensor;
-						import linkjvm.high.sensors.analog.acceleration.AccelerationSensor;
+						import linkjvm.sensors.analog.AnalogSensor;
+						import linkjvm.sensors.analog.acceleration.AccelerationSensor;
 						(...)
 						//Create a new analog sensor
 						AnalogSensor analog = new AnalogSensor(PORT);
@@ -220,8 +220,8 @@
 				<section>
 					<h2>Digital Sensors</h2>
 					<pre><code class="language-java">
-						import linkjvm.high.sensors.buttons.*;
-						import linkjvm.high.sensors.digital.DigitalSensor;
+						import linkjvm.sensors.buttons.*;
+						import linkjvm.sensors.digital.DigitalSensor;
 						(...)
 						//Create a new digital sensor
 						DigitalSensor digital = new DigitalSensor(PORT);
@@ -239,8 +239,8 @@
 				<section>
 					<h2>Controlling Motors and Servos</h2>
 					<pre><code class="language-java">
-						import linkjvm.high.motors.Motor;
-						import linkjvm.high.motors.Servo;
+						import linkjvm.motors.Motor;
+						import linkjvm.motors.Servo;
 						(...)
 						//Create a new servo
 						Servo servo = new Servo();
@@ -288,7 +288,7 @@
 					<h2>Controlling the Create</h2>
 					<p>An instance of the create class is used to control the create. The method names are pretty equal to libkovan.</p>
 					<pre><code class="language-java">
-						import linkjvm.high.create.Create;
+						import linkjvm.create.Create;
 						(...)
 						Create create = new Create();
 						//Establishes a connection to the create
@@ -342,6 +342,9 @@
 						The LinkJVM's vision system is a little bit different to libkovan's:
 					</p>
 					<img src="./img/vision.svg" width="800">
+					<p>
+						You can find the vision classes in the <code class="language-none">linkjvm.vision</code> package.
+					</p>
 				</section>
 				<section>
 					<h2>Activity 3 - Solution</h2>
@@ -383,7 +386,7 @@
 					</p>
 					<h3>Usage</h3>
 					<pre><code class="language-java">
-						import linkjvm.high.debugger.Debugger;
+						import linkjvm.debugger.Debugger;
 						(...)
 						Debugger debugger = new Debugger("PC IP");
 						debugger.write("Some text!");
